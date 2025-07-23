@@ -1,14 +1,10 @@
 from fastapi import FastAPI
+from app.backend.routers import auth
 
 
-def create_app() -> FastAPI:
-    """
-    Factory function that creates and configures a FastAPI application instance.
-    """
-    app = FastAPI()
-
-    @app.get("/ping")
-    def ping():
-        return {"ping": "pong"}
-
-    return app
+app = FastAPI(
+    title="Task Managemer API",
+    version="1.0.0",
+    description="API for managing tasks"
+)
+app.include_router(auth.router)
