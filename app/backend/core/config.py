@@ -22,6 +22,15 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "production"
     DATABASE_URL: str
 
+    # ------------------------------------------------------------------
+    # SECURITY
+    # ------------------------------------------------------------------
+    JWT_ALGORITHM: str
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int
+    JWT_REFRESH_TOKEN_EXPIRE_DAYS: int
+    JWT_SECRET_KEY: str
+    JWT_SCHEMES: str
+
     class Config:
         env_file = ".env"
         case_sensitive = True

@@ -2,16 +2,6 @@
 
 ## PLAN
 
-### Phase 4 – Auth working slice
-
-1. Security utilities (`core/security.py`)  
-   • `hash_password`, `verify_password`, `create_access_token`, `create_refresh_token`.  
-2. Service (`services/auth_service.py`)  
-   • `register()` – insert user row.  
-   • `login()` – verify password, return tokens.  
-3. Update router functions to call service, return real 200/400.  
-4. Test with curl or Swagger.
-
 ### Phase 5 – Current user info
 
 1. Schema `UserOut` in `schemas/user.py`.  
@@ -58,7 +48,7 @@ Time guide
 1. In `main.py`  
    • write `create_app()` that returns a FastAPI instance.  
    • add one route `GET /ping` → `{"ping": "pong"}`  
-2. `docker compose up` – verify http://localhost:8000/ping works.
+2. `docker compose up`
 
 ### Phase 2 – DB & Migrations (goal: tables exist)
 
@@ -76,3 +66,13 @@ Time guide
    • `routers/auth.py` – stub two endpoints returning 501 “Not Implemented”.  
 3. Wire router into `main.py`.  
 4. Test in Swagger that endpoints appear.
+
+### Phase 4 – Auth working slice
+
+1. Security utilities (`core/security.py`)  
+   • `hash_password`, `verify_password`, `create_access_token`, `create_refresh_token`.  
+2. Service (`services/auth_service.py`)  
+   • `register()` – insert user row.  
+   • `login()` – verify password, return tokens.  
+3. Update router functions to call service, return real 200/400.  
+4. Test with curl or Swagger.

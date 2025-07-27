@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from app.backend.routers import auth
+from app.backend.utils.logger import setup_logging
+
+# Set up logging
+setup_logging()
 
 
 app = FastAPI(
