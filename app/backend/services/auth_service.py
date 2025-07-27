@@ -1,9 +1,13 @@
 """Authentication Service"""
 import logging
+from typing import Dict, Any
 from uuid import UUID
 
+
 from fastapi import HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
+from jwt import PyJWTError
 
 from app.backend.core.config import Settings
 from app.backend.models.user import User
@@ -105,3 +109,37 @@ class AuthService:
             "refresh_token": refresh_token,
             "token_type": "bearer"
         }
+
+    async def get_current_user_id(
+            self, credentials: HTTPAuthorizationCredentials) -> UUID:
+        token = credentials.credentials
+        try:
+            payload: Dict[str, Any] = self._security_manager.decode_token(token)
+            user_id_str: Any = payload.get("sub")
+            if user_id_str is None:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Could not validate credentials",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            user_id = UUID(user_id_str)
+            token_type = payload.get("type")
+            if token_type != "access":
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid token type. Only access tokens are allowed for this endpoint.",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            return user_id
+        except PyJWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid user ID in token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )

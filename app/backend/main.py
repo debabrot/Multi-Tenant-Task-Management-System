@@ -1,5 +1,8 @@
+"""Main entrypoint for the task management API"""
+
 from fastapi import FastAPI
-from app.backend.routers import auth
+
+from app.backend.routers import auth, users
 from app.backend.utils.logger import setup_logging
 
 # Set up logging
@@ -12,3 +15,4 @@ app = FastAPI(
     description="API for managing tasks"
 )
 app.include_router(auth.router)
+app.include_router(users.router)
