@@ -2,24 +2,6 @@
 
 ## PLAN
 
-### Phase 5 – Current user info
-
-1. Schema `UserOut` in `schemas/user.py`.  
-2. Router `GET /me` that uses JWT dependency to get user id and returns `UserOut`.  
-3. No update yet; just read.
-
-### Phase 6 – Task CRUD skeleton
-
-1. Schema `TaskCreate`, `TaskOut`, `TaskListOut` in `schemas/task.py`.  
-2. Router `routers/tasks.py` – stub all endpoints with 501.  
-3. Wire router.
-
-### Phase 7 – Task CRUD working slice
-
-1. Service (`services/task_service.py`)  
-   • `create_task`, `list_tasks`, `get_task`, `update_task`, `delete_task`.  
-2. Fill in router functions; protect with JWT dependency.  
-3. Verify via Swagger.
 
 ### Phase 8 – Polish
 
@@ -76,3 +58,22 @@ Time guide
    • `login()` – verify password, return tokens.  
 3. Update router functions to call service, return real 200/400.  
 4. Test with curl or Swagger.
+
+### Phase 5 – Current user info
+
+1. Schema `UserOut` in `schemas/user.py`.  
+2. Router `GET /me` that uses JWT dependency to get user id and returns `UserOut`.  
+3. No update yet; just read.
+
+### Phase 6 – Task CRUD skeleton
+
+1. Schema `TaskCreate`, `TaskOut`, `TaskListOut` in `schemas/task.py`.  
+2. Router `routers/tasks.py` – stub all endpoints with 501.  
+3. Wire router.
+
+### Phase 7 – Task CRUD working slice
+
+1. Service (`services/task_service.py`)  
+   • `create_task`, `list_tasks`, `get_task`, `update_task`, `delete_task`.  
+2. Fill in router functions; protect with JWT dependency.  
+3. Verify via Swagger.

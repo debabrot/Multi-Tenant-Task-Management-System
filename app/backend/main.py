@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 
-from app.backend.routers import auth, users
+from app.backend.routers import auth, users, tasks
 from app.backend.utils.logger import setup_logging
 
 # Set up logging
@@ -16,3 +16,4 @@ app = FastAPI(
 )
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(tasks.router)

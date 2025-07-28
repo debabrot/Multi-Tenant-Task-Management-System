@@ -14,6 +14,7 @@ from app.backend.core.database import get_db
 from app.backend.core.security import SecurityManager
 from app.backend.services.auth_service import AuthService
 from app.backend.services.user_service import UserService
+from app.backend.services.task_service import TaskService
 
 # Initalize HTTPBearer for token authentication
 http_bearer = HTTPBearer()
@@ -57,3 +58,20 @@ async def get_current_user_id(
     auth_service: AuthService = Depends(get_auth_service)
 ) -> UUID:
     return await auth_service.get_current_user_id(credentials)
+
+
+async def get_task_service(db: Session = Depends(get_db)) -> TaskService:
+    """
+    Dependency to get TaskService instance.
+    
+    Parameters
+    ----------
+    db : Session
+        Database session
+        
+    Returns
+    -------
+    TaskService
+        TaskService instance
+    """
+    return TaskService(db)
