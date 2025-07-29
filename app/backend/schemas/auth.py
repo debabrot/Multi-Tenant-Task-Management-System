@@ -22,3 +22,6 @@ class TokenResponse(BaseModel):
 
 class RegisterResponse(BaseModel):
     message: str
+
+class LogoutResponse(BaseModel):
+    message: str

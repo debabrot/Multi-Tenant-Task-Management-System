@@ -29,7 +29,8 @@ class SecurityManager:
     """
     def __init__(self, settings: Settings):
         self._settings = settings
-        self._blacklist: set[str] = set()
+        self._blacklist_access: set[str] = set()
+        self._blacklist_refresh: set[str] = set()
 
     @staticmethod
     def hash_password(plain: str) -> str:
@@ -40,6 +41,22 @@ class SecurityManager:
     def verify_password(plain: str, hashed: str) -> bool:
         """Return True if the plain password matches the stored hash."""
         return _pwd_ctx.verify(plain, hashed)
+    
+    async def revoke_access_token(self, token: str) -> None:
+        """Add an access token to the blacklist (for logout)."""
+        self._blacklist_access.add(token)
+    
+    async def revoke_refresh_token(self, token: str) -> None:
+        """Add a refresh token to the blacklist."""
+        self._blacklist_refresh.add(token)
+    
+    async def is_access_token_revoked(self, token: str) -> bool:
+        """Check whether an access token has been revoked."""
+        return token in self._blacklist_access
+    
+    async def is_refresh_token_revoked(self, token: str) -> bool:
+        """Check whether a refresh token has been revoked."""
+        return token in self._blacklist_refresh
 
     def decode_token(self, token: str) -> Dict[str, object]:
         """
@@ -50,7 +67,14 @@ class SecurityManager:
         jwt.InvalidTokenError
             If signature, exp, nbf or other claim is invalid.
         """
-        return jwt.decode(token, self._settings.JWT_SECRET_KEY, algorithms=[self._settings.JWT_ALGORITHM])
+        payload = jwt.decode(token, self._settings.JWT_SECRET_KEY, algorithms=[self._settings.JWT_ALGORITHM])
+        # Check blacklist based on token type
+        token_type = payload.get("type")
+        if token_type == "access" and token in self._blacklist_access:
+            raise jwt.InvalidTokenError("Access token has been revoked")
+        elif token_type == "refresh" and token in self._blacklist_refresh:
+            raise jwt.InvalidTokenError("Refresh token has been revoked")
+        return payload
 
     def create_access_token(
         self,
@@ -123,11 +147,3 @@ class SecurityManager:
         token = jwt.encode(payload, self._settings.JWT_SECRET_KEY, algorithm=self._settings.JWT_ALGORITHM)
 
         return token
-
-    def revoke_refresh_token(self, token: str) -> None:
-        """Add a refresh token to the blacklist (effectively revoking it)."""
-        self._blacklist.add(token)
-
-    def is_refresh_token_revoked(self, token: str) -> bool:
-        """Check whether a refresh token has been revoked."""
-        return token in self._blacklist

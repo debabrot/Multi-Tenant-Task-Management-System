@@ -25,7 +25,8 @@ def get_settings() -> Settings:
     return settings
 
 
-def get_security_manager(settings: Settings=Depends(get_settings)) -> SecurityManager:
+@lru_cache
+def get_security_manager() -> SecurityManager:
     return SecurityManager(settings)
 
 
