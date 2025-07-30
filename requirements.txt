@@ -9,3 +9,5 @@ pydantic-settings
 PyJWT
 passlib
 argon2_cffi
+pytest
+pytest-asyncio
