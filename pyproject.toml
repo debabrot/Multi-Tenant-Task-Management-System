@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multi-tenant-task-management"
+version = "0.1.0"
+description = "Multi-Tenant Task Management System"
+dependencies = []
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "."
+]
+testpaths = [
+    "app/tests"
+]
