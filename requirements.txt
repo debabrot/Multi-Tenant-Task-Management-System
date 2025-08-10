@@ -11,3 +11,4 @@ passlib
 argon2_cffi
 pytest
 pytest-asyncio
+streamlit
